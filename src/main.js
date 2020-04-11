@@ -1,4 +1,5 @@
 import { soma, subtracao } from './funcoes';
+import axios from 'axios';
 
 class list {
     constructor(){
@@ -103,7 +104,6 @@ minhaPromise().then(response => {
 async function executaPromise(){
     console.log(await minhaPromise());
     console.log(await minhaPromise());
-    console.log(await minhaPromise());
 }
 
 executaPromise();
@@ -113,7 +113,22 @@ executaPromise();
 const executaPromiseArrowFunc = async () => {
     console.log(await minhaPromise());
     console.log(await minhaPromise());
-    console.log(await minhaPromise());
 }
 
 executaPromiseArrowFunc();
+
+// Configurando o Axios
+
+class Api {
+    static async getUserInfo(username){
+        try{
+            const response = await axios.get(`https://api.github.com/users/${username}`);
+            console.log(response);
+        } catch (err) {
+            console.warn('Erro na API');
+        }
+    }
+}
+
+Api.getUserInfo('gustavobretassdfsdfsdf');
+Api.getUserInfo('gustavobretas');
