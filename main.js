@@ -1,4 +1,4 @@
-import { soma } from './funcoes';
+import { soma, subtracao } from './funcoes';
 
 class list {
     constructor(){
@@ -83,3 +83,4 @@ console.log('Meu nome é '+nomeLiterals+' e tenho '+idadeLiterals+' anos.')
 console.log(`Meu nome é ${nomeLiterals} e tenho ${idadeLiterals} anos.`)
 
 console.log(soma(1,2));
+console.log(subtracao(1,2));
