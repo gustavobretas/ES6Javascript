@@ -71,3 +71,11 @@ const usuario1 = {
 const usuario2 = {...usuario1, nome: 'Ricardo'}
 
 console.log(usuario2);
+
+// Template Literals
+
+const nomeLiterals = 'Gustavo';
+const idadeLiterals = 35;
+
+console.log('Meu nome é '+nomeLiterals+' e tenho '+idadeLiterals+' anos.')
+console.log(`Meu nome é ${nomeLiterals} e tenho ${idadeLiterals} anos.`)
