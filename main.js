@@ -1,3 +1,5 @@
+import { soma } from './funcoes';
+
 class list {
     constructor(){
         this.data = []
@@ -46,12 +48,12 @@ const [a, b, ...c] = arr
 
 console.log(a, b, c)
 
-function soma(...params) {
+function somaRest(...params) {
     return params.reduce((total, next) => total + next);
 }
 
-console.log(soma(1,2,3,4,5,6));
-console.log(soma(1,2,3,4));
+console.log(somaRest(1,2,3,4,5,6));
+console.log(somaRest(1,2,3,4));
 
 // SPREAD Operator
 
@@ -79,3 +81,5 @@ const idadeLiterals = 35;
 
 console.log('Meu nome é '+nomeLiterals+' e tenho '+idadeLiterals+' anos.')
 console.log(`Meu nome é ${nomeLiterals} e tenho ${idadeLiterals} anos.`)
+
+console.log(soma(1,2));
