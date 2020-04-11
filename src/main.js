@@ -84,3 +84,36 @@ console.log(`Meu nome é ${nomeLiterals} e tenho ${idadeLiterals} anos.`)
 
 console.log(soma(1,2));
 console.log(subtracao(1,2));
+
+
+// Async/Await
+
+const minhaPromise = () => new Promise((resolve, reject) => {
+    setTimeout(() => {
+        resolve('OK')
+    }, 2000);
+})
+
+minhaPromise().then(response => {
+    console.log(response)
+});
+
+// ES8
+
+async function executaPromise(){
+    console.log(await minhaPromise());
+    console.log(await minhaPromise());
+    console.log(await minhaPromise());
+}
+
+executaPromise();
+
+// Executando como Arrow Function
+
+const executaPromiseArrowFunc = async () => {
+    console.log(await minhaPromise());
+    console.log(await minhaPromise());
+    console.log(await minhaPromise());
+}
+
+executaPromiseArrowFunc();
