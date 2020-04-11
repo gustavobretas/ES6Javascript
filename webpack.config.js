@@ -1,9 +1,9 @@
 module.exports = {
     entry: './main.js',
-    // output: {
-    //     path: __dirname,
-    //     file: 'bundle.js'
-    // },
+    output: {
+        path: __dirname,
+        filename: 'bundle.js'
+    },
     module: {
         rules: [
             {
