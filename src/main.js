@@ -1,134 +1,88 @@
-import { soma, subtracao } from './funcoes';
-import axios from 'axios';
+import api from './api';
 
-class list {
+class App {
     constructor(){
-        this.data = []
+        this.repositories = [];
+        this.formEl = document.getElementById('repo-form');
+        this.listEl = document.getElementById('repo-list');
+        this.inputEl = document.querySelector('input[name=repository]');
+
+        this.registerHandlers();
     }
-    
-    add(data) {
-        this.data.push(data);
-        console.log(this.data);
+
+    registerHandlers() {
+        this.formEl.onsubmit = event => this.addRepository(event);
     }
-}
 
-class TodoList extends list {
-    constructor(){
-        super();
-        this.usuario = 'Gustavo'
-    }
-    mostraUsuario() {
-        console.log(this.usuario);
-    }    
-}
-const MinhaLista = new TodoList();
+    setLoading(loading = true) {
+        if (loading === true) {
+            let loadingEl = document.createElement('span');
+            loadingEl.appendChild(document.createTextNode('Carregando...'));
+            loadingEl.setAttribute('id', 'loading')
 
-document.getElementById('novotodo').onclick = function(){
-    MinhaLista.add('Novo Todo');
-}
-
-MinhaLista.mostraUsuario();
-
-// Operadores rest/spread
-
-const usuario = {
-    nome: 'Gustavo',
-    idade: 35,
-    empresa: 'Shipinbox'
-}
-
-const { nome, ...resto } = usuario;
-
-console.log(nome);
-console.log(resto);
-
-// Array
-const arr = [1, 2, 3, 4];
-
-const [a, b, ...c] = arr
-
-console.log(a, b, c)
-
-function somaRest(...params) {
-    return params.reduce((total, next) => total + next);
-}
-
-console.log(somaRest(1,2,3,4,5,6));
-console.log(somaRest(1,2,3,4));
-
-// SPREAD Operator
-
-const arr1 = [1,2,3];
-const arr2 = [4,5,6];
-
-const arr3 = [...arr1, ...arr2];
-
-console.log(arr3)
-
-const usuario1 = {
-    nome: 'Gustavo',
-    idade: 35,
-    empresa: 'Shipinbox'
-}
-
-const usuario2 = {...usuario1, nome: 'Ricardo'}
-
-console.log(usuario2);
-
-// Template Literals
-
-const nomeLiterals = 'Gustavo';
-const idadeLiterals = 35;
-
-console.log('Meu nome é '+nomeLiterals+' e tenho '+idadeLiterals+' anos.')
-console.log(`Meu nome é ${nomeLiterals} e tenho ${idadeLiterals} anos.`)
-
-console.log(soma(1,2));
-console.log(subtracao(1,2));
-
-
-// Async/Await
-
-const minhaPromise = () => new Promise((resolve, reject) => {
-    setTimeout(() => {
-        resolve('OK')
-    }, 2000);
-})
-
-minhaPromise().then(response => {
-    console.log(response)
-});
-
-// ES8
-
-async function executaPromise(){
-    console.log(await minhaPromise());
-    console.log(await minhaPromise());
-}
-
-executaPromise();
-
-// Executando como Arrow Function
-
-const executaPromiseArrowFunc = async () => {
-    console.log(await minhaPromise());
-    console.log(await minhaPromise());
-}
-
-executaPromiseArrowFunc();
-
-// Configurando o Axios
-
-class Api {
-    static async getUserInfo(username){
-        try{
-            const response = await axios.get(`https://api.github.com/users/${username}`);
-            console.log(response);
-        } catch (err) {
-            console.warn('Erro na API');
+            this.formEl.appendChild(loadingEl);
+        } else {
+            document.getElementById('loading').remove();
         }
     }
+    async addRepository(event) {
+        event.preventDefault();
+        this.setLoading();
+        const repoInput = this.inputEl.value;
+
+        if (repoInput.length === 0) {
+            return
+        };
+
+        try {
+            const response = await api.get(`/repos/${repoInput}`);
+
+            const { name, description, html_url, owner: { avatar_url } } = response.data;
+
+            this.repositories.push({
+                name,
+                description,
+                avatar_url,
+                html_url
+            });
+
+            this.inputEl.value = '';
+            
+            this.render();
+        } catch (err) {
+            alert('O repositório não existe!')
+        }
+
+        this.setLoading(false);
+    }
+
+    render() {
+        this.listEl.innerHTML = '';
+
+        this.repositories.forEach(repo => {
+            let imgEl = document.createElement('img');
+            imgEl.setAttribute('src', repo.avatar_url);
+
+            let titleEl = document.createElement('strong');
+            titleEl.appendChild(document.createTextNode(repo.name));
+
+            let descriptionEl = document.createElement('p');
+            descriptionEl.appendChild(document.createTextNode(repo.description));
+
+            let linkEl = document.createElement('a');
+            linkEl.setAttribute('target', '_blank');
+            linkEl.setAttribute('href', repo.html_url);
+            linkEl.appendChild(document.createTextNode('Acessar'));
+
+            let listItemEl = document.createElement('li');
+            listItemEl.appendChild(imgEl);
+            listItemEl.appendChild(titleEl);
+            listItemEl.appendChild(descriptionEl);
+            listItemEl.appendChild(linkEl);
+
+            this.listEl.appendChild(listItemEl);
+        })
+    }
 }
 
-Api.getUserInfo('gustavobretassdfsdfsdf');
-Api.getUserInfo('gustavobretas');
+new App();
