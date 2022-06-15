@@ -5,7 +5,7 @@ module.exports = {
         filename: 'bundle.js'
     },
     devServer: {
-        contentBase: __dirname + '/public'
+        watchFiles : __dirname + '/public'
     },
     module: {
         rules: [
